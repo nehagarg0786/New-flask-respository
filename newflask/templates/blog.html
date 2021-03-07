@@ -1,0 +1,59 @@
+{% extends 'main.html' %}
+{% block title %}
+<title>Blog post</title>
+{% endblock title %}
+{% block body %}
+<h1>Blog page</h1>
+<form method='POST' action='/blogpost'>
+<div class="form-group">
+  <label for="exampleFormControlTextarea1">Title</label>
+  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Title" name='title' required>
+    
+  </div><br>
+  <div class="form-group">
+    <label for="exampleFormControlTextarea1">Content</label>
+    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name='content' required></textarea >
+  </div><br>
+  <!-- <input type='submit' value='POST' class= 'btn btn-primary'>  -->
+  <button class ="btn btn-primary" onclick ="submit_entry();">Submit</button>
+<!-- {{current_user.username}} -->
+<script>
+  function submit_entry() {
+    event.preventDefault();
+    
+    var title = document.getElementById("exampleFormControlInput1")
+    var content = document.getElementById("exampleFormControlTextarea1")
+
+    var entry = {
+      title : title.value,
+      content: content.value
+    };
+
+        fetch(`${window.origin}/blogpost`, {
+  method: "POST",
+  credentials: "include",
+  body: JSON.stringify(entry),
+  cache: "no-cache",
+  headers: new Headers({
+    "content-type": "application/json"
+  })
+})
+.then(function(response) {
+  if (response.status !== 200) {
+    console.log(`Looks like there was a problem. Status code: ${response.status}`);
+    return;
+  }
+  response.json().then(function(data) {
+    window.location.href ='/blog_detail/1';
+  });
+})
+.catch(function(error) {
+  console.log("Fetch error: " + error);
+});
+}
+</script>
+
+<!-- </div> -->
+<!-- {{current_user.username}} -->
+</form> 
+{% endblock body %}

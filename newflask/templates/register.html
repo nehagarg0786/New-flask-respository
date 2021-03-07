@@ -1,0 +1,81 @@
+{% extends 'main.html' %}
+{% block title %}
+<title>register</title>
+{% endblock title %}
+{% block body%}
+<h1 class = 'text-center'>Register page</h1>
+<form class="row g-3" method='POST' action="/register">
+    <div class="col-md-12">
+      <label for="inputEmail4" class="form-label">Email</label>
+      <input type="email" class="form-control" id="inputEmail4" name ='email'>
+    </div>
+    
+    <div class="col-12">
+      <label for="inputAddress" class="form-label">First Name</label>
+      <input type="text" class="form-control" id="inputAddress" placeholder="FirstName" name='fname'>
+    </div>
+    <div class="col-12">
+      <label for="inputAddress2" class="form-label">Last Name</label>
+      <input type="text" class="form-control" id="inputAddress2" placeholder="LastName" name ='lname'>
+    </div>
+    
+    <div class="col-md-12">
+      <label for="inputZip" class="form-label">Username</label>
+      <input type="text" class="form-control" id="username" placeholder="username" name='uname'> 
+    </div>
+
+    <div class="col-md-12">
+      <label for="inputPassword4" class="form-label">Password</label>
+      <input type="password" class="form-control" id="inputPassword4" name='password'>
+    </div>
+    
+    <div class="col-12">
+      <button class ="btn btn-primary" onclick ="submit_entry();">Register</button>
+      <script>
+        function submit_entry() {
+          event.preventDefault();
+          var email = document.getElementById("inputEmail4")
+          var fname = document.getElementById("inputAddress")
+          var lname = document.getElementById("inputAddress2")
+          var uname = document.getElementById("username")
+          var password = document.getElementById("inputPassword4")
+      
+          var entry = {
+            email : email.value,
+            fname : fname.value,
+            lname : lname.value,
+            uname : uname.value,
+            password: password.value
+          };
+
+              fetch(`${window.origin}/register`, {
+        method: "POST",
+        credentials: "include",
+        body: JSON.stringify(entry),
+        cache: "no-cache",
+        headers: new Headers({
+          "content-type": "application/json"
+        })
+      })
+      .then(function(response) {
+        if (response.status !== 200) {
+          console.log(`Looks like there was a problem. Status code: ${response.status}`);
+          return;
+        }
+        response.json().then(function(data) {
+          
+          window.location.href = "/login";
+        });
+      })
+      .catch(function(error) {
+        console.log("Fetch error: " + error);
+    });
+    }
+      </script>
+      
+
+    </div>
+  </form>
+{% endblock body %}
+
+
