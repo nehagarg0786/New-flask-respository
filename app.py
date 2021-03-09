@@ -3,9 +3,12 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, login_user, UserMixin, logout_user, login_required
 from datetime import datetime
 import logging
+import urllib.parse
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///mydb.db'
+params=urllib.parse.quote_plus("Driver={SQL Server};Server=tcp:dbserver-2.database.windows.net,1433;Database=db-create-1;Uid=nehaadmin;Pwd=Welcome@123;Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;")
+app.config['SQLALCHEMY_DATABASE_URI'] = "mssql+pyodbc:///?odbc_connect=%s" % params
+app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = True
 app.config['SECRET_KEY'] = 'super secret key'
 db = SQLAlchemy(app)
 login_manager = LoginManager()
