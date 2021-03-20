@@ -1,39 +1,41 @@
 from flask import Flask, render_template, request, jsonify,flash, redirect , session, make_response 
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, login_user, UserMixin, logout_user, login_required
-from datetime import datetime
+#from datetime import datetime
 import logging
-import urllib.parse
+#import urllib.parse
+
+
 
 app = Flask(__name__)
-params=urllib.parse.quote_plus("Driver={ODBC Driver 17 for SQL Server};Server=tcp:dbserver-2.database.windows.net,1433;Database=db-create-1;Uid=nehaadmin;Pwd=Welcome@123;Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;")
-app.config['SQLALCHEMY_DATABASE_URI'] = "mssql+pyodbc:///?odbc_connect=%s" % params
-app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = True
-app.config['SECRET_KEY'] = 'super secret key'
-db = SQLAlchemy(app)
+# params=urllib.parse.quote_plus("Driver={ODBC Driver 17 for SQL Server};Server=tcp:dbserver-2.database.windows.net,1433;Database=db-create-1;Uid=nehaadmin;Pwd=Welcome@123;Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;")
+# app.config['SQLALCHEMY_DATABASE_URI'] = "mssql+pyodbc:///?odbc_connect=%s" % params
+# app.config['SQLALCHEMY_COMMIT_ON_TEARDOWN'] = True
+# app.config['SECRET_KEY'] = 'super secret key'
+#db = SQLAlchemy(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view="login"
 
-class User(UserMixin,db.Model):
-    id = db.Column(db.Integer, primary_key=True,)
-    username = db.Column(db.String(80), nullable=False,  unique=True)
-    blogs =db.relationship('Blog',backref='owner')
-    email = db.Column(db.String(120), nullable=False,  unique=True)
-    fname = db.Column(db.String(120), nullable=False)
-    lname = db.Column(db.String(120), nullable=False)
-    password = db.Column(db.String(120),nullable=False)
-    def __repr__(self):
-        return '<User %r>' % self.username
+# class User(UserMixin,db.Model):
+#     id = db.Column(db.Integer, primary_key=True,)
+#     username = db.Column(db.String(80), nullable=False,  unique=True)
+#     blogs =db.relationship('Blog',backref='owner')
+#     email = db.Column(db.String(120), nullable=False,  unique=True)
+#     fname = db.Column(db.String(120), nullable=False)
+#     lname = db.Column(db.String(120), nullable=False)
+#     password = db.Column(db.String(120),nullable=False)
+#     def __repr__(self):
+#         return '<User %r>' % self.username
 
-class Blog(db.Model):
-    blog_id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(80), nullable=False)
-    owner_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    content=db.Column(db.Text(), nullable=False)
-    pub_date=db.Column(db.DateTime(), nullable=False, default=datetime.utcnow)
-    def __repr__(self):
-        return '<Blog %r>' % self.title
+# class Blog(db.Model):
+#     blog_id = db.Column(db.Integer, primary_key=True)
+#     title = db.Column(db.String(80), nullable=False)
+#     owner_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+#     content=db.Column(db.Text(), nullable=False)
+#     pub_date=db.Column(db.DateTime(), nullable=False, default=datetime.utcnow)
+#     def __repr__(self):
+#         return '<Blog %r>' % self.title
 
 
 
@@ -49,6 +51,9 @@ def main():
 
 @app.route('/') #blank URL
 def index():
+#print(f'ENV is set to: {app.config["ENV"]}')
+#    app.config["SECRET_KEY"] = "iuhto743yto34iuho287gh78"
+#    print(app.config["SECRET_KEY"])
     data = Blog.query.all()
     print(data)
         
